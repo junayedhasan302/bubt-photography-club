@@ -24,9 +24,16 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
 
+  const isActiveLink = (href: string) => {
+    return (
+      pathname === href || (href !== "/" && pathname.startsWith(`${href}/`))
+    );
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur-xl">
       <div className="container-custom">
+        {/* Main Navbar Row */}
         <div className="flex min-h-[76px] items-center justify-between gap-4">
           {/* Brand */}
           <Link
@@ -49,12 +56,13 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-4 xl:flex">
+          {/* Desktop Navigation: 1280px and above */}
+          <nav
+            aria-label="Main navigation"
+            className="hidden items-center gap-4 xl:flex"
+          >
             {navigationLinks.map((item) => {
-              const isActive =
-                pathname === item.href ||
-                (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+              const isActive = isActiveLink(item.href);
 
               return (
                 <Link
@@ -75,6 +83,7 @@ export default function Navbar() {
 
           {/* Actions */}
           <div className="flex shrink-0 items-center gap-2">
+            {/* Theme Toggle */}
             <button
               type="button"
               onClick={toggleTheme}
@@ -88,6 +97,7 @@ export default function Navbar() {
               )}
             </button>
 
+            {/* Hamburger: Mobile Only */}
             <button
               type="button"
               onClick={() => setMenuOpen((previous) => !previous)}
@@ -95,21 +105,47 @@ export default function Navbar() {
                 menuOpen ? "Close navigation menu" : "Open navigation menu"
               }
               aria-expanded={menuOpen}
-              className="flex size-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] transition-colors hover:border-[var(--primary)] xl:hidden"
+              className="flex size-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] transition-colors hover:border-[var(--primary)] md:hidden"
             >
               {menuOpen ? <X size={21} /> : <Menu size={21} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Tablet Navigation: 768px to 1279px */}
+        <nav
+          aria-label="Tablet navigation"
+          className="hidden flex-wrap items-center justify-center gap-x-5 gap-y-3 border-t border-[var(--border)] py-4 md:flex xl:hidden"
+        >
+          {navigationLinks.map((item) => {
+            const isActive = isActiveLink(item.href);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className={`whitespace-nowrap text-xs font-semibold transition-colors duration-200 lg:text-[13px] ${
+                  isActive
+                    ? "text-[var(--primary)]"
+                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Mobile Navigation: Below 768px */}
         {menuOpen && (
-          <nav className="border-t border-[var(--border)] py-4 xl:hidden">
+          <nav
+            aria-label="Mobile navigation"
+            className="border-t border-[var(--border)] py-4 md:hidden"
+          >
             <div className="flex flex-col gap-1">
               {navigationLinks.map((item) => {
-                const isActive =
-                  pathname === item.href ||
-                  (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+                const isActive = isActiveLink(item.href);
 
                 return (
                   <Link

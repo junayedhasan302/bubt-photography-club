@@ -1,8 +1,8 @@
 
 import Hero from "@/components/sections/Hero";
 import ClubIntroduction from "@/components/sections/ClubIntroduction";
-import FeaturedGallery from "@/components/sections/FeaturedGallery";
 import ClubHighlights from "@/components/sections/ClubHighlights";
+import FeaturedGallery from "@/components/sections/FeaturedGallery";
 import CommitteePreview from "@/components/sections/CommitteePreview";
 import UpcomingEvents from "@/components/sections/UpcomingEvents";
 import ContestPreview from "@/components/sections/ContestPreview";
@@ -15,8 +15,8 @@ export default function Home() {
     <>
       <Hero />
       <ClubIntroduction />
-      <FeaturedGallery />
       <ClubHighlights />
+      <FeaturedGallery />
       <CommitteePreview />
       <UpcomingEvents />
       <ContestPreview />
